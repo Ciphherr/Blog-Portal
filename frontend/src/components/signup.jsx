@@ -1,12 +1,13 @@
 import Input from "./Input";
 import Button from "./Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axios from 'axios'
-
+import axios from 'axios';
+import { useAuth } from "../Context/authContext";
 
 const signup = ({type}) => {
-
+  const { checkAuth } = useAuth();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     username: "",
@@ -24,13 +25,29 @@ const signup = ({type}) => {
   const handleSubmit = async (e)=>{
     e.preventDefault();
     
-    const endpoint = type == "sign-up"?"http://localhost:3000/users/register":"http://localhost:3000/api/auth/login";
-    const payload = type == "sign-up"?formData: {username:formData.username, password:formData.password}
+    try{
+      const endpoint = type == "sign-up"?"http://localhost:3000/users/register":"http://localhost:3000/users/login";
+      const payload = type == "sign-up"?formData: {username:formData.username, password:formData.password};
 
-    const response = await axios.post(endpoint, payload);
+      const response = await axios.post(endpoint, payload, { withCredentials: true });
 
-    alert("success!");
+      setFormData({
+        username: "",
+        email: "",
+        password: ""
+      });
 
+      if (type === "sign-in") {
+        await checkAuth();
+      }
+
+      navigate("/");
+
+    }
+    catch(err){
+      console.log("error is :", err.response.data);
+      alert("something went wrong");
+    }
   }
 
 

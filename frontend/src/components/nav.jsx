@@ -1,6 +1,9 @@
 import { Link, Outlet } from "react-router-dom";
+import { useAuth } from "../Context/authContext";
 
 const Navbar = () => {
+  const { loggedIn, logout } = useAuth();
+
   return (
     <>
       <div className="main w-full h-20 z-20 overflow-hidden sticky flex items-center justify-center border-b-2 p-3 shadow-md sm:h-20 sm:items-center sm:justify-between bg-dark">
@@ -115,10 +118,20 @@ const Navbar = () => {
             write
           </Link>
 
-          {/*login Link */}
-          <Link to="/signin" className="w-full p-2  sm:bg-dark-light sm:text-white sm:px-4 sm:py-2 sm:rounded-xl sm:hover:bg-bright sm:hover:text-dark sm:transition-all sm:w-auto">
-            Sign In
-          </Link>
+          {/*login Link and Logout Link */}
+          {loggedIn ? (
+            <button
+              onClick={logout}
+              className="w-full p-2  sm:bg-dark-light sm:text-white sm:px-4 sm:py-2 sm:rounded-xl sm:hover:bg-bright sm:hover:text-dark sm:transition-all sm:w-auto"
+            >Log out</button>
+          ) : (
+            <Link
+              to="/signin"
+              className="w-full p-2  sm:bg-dark-light sm:text-white sm:px-4 sm:py-2 sm:rounded-xl sm:hover:bg-bright sm:hover:text-dark sm:transition-all sm:w-auto"
+            >
+              Sign In
+            </Link>
+          )}
         </div>
       </div>
       <Outlet />
