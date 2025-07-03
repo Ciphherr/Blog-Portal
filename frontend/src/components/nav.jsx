@@ -1,140 +1,221 @@
 import { Link, Outlet } from "react-router-dom";
 import { useAuth } from "../Context/authContext";
+import { useState } from "react";
 
 const Navbar = () => {
   const { loggedIn, logout } = useAuth();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
   return (
     <>
-      <div className="main w-full h-20 z-20 overflow-hidden sticky flex items-center justify-center border-b-2 p-3 shadow-md sm:h-20 sm:items-center sm:justify-between bg-dark">
-        {/*first div */}
-        <div className="absolute top-0 sm:relative flex justify-between items-center p-3 w-full sm:w-fit sm:p-0">
-          {/*menu */}
-          <Link
-            onClick={() => {
-              function toggleMultiple(el, ...classes) {
-                classes.forEach((cls) => el.classList.toggle(cls));
-              }
-              toggleMultiple(document.querySelector(".main"), "h-[45%]");
-              toggleMultiple(
-                document.querySelector(".nav-btns"),
-                "hidden",
-                "flex",
-                "flex-col",
-                "gap-2"
-              );
-            }}
-            className="rounded-[50%] bg-amber-400 px-2 py-2 sm:hidden"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-              />
-            </svg>
-          </Link>
+      {/* Navbar */}
+      <nav className="fixed top-0 w-full z-50 bg-dark backdrop-blur-lg border-b shadow-xl">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <div className="flex-shrink-0">
+              <Link to="/" className="group flex items-center space-x-2">
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center shadow-lg transform group-hover:scale-105 transition-transform duration-200">
+                  <span className="text-slate-900 font-bold text-xl">L</span>
+                </div>
+                <span className="text-2xl font-bold bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
+                  Literarian
+                </span>
+              </Link>
+            </div>
 
-          {/*title */}
-          <a href="/" className="text-xl font-bold text-light">
-            Literarian
-          </a>
+            {/* Desktop Navigation */}
+            <div className="hidden md:block flex-1 max-w-2xl mx-8">
+              <div className="relative">
+                <input
+                  type="search"
+                  placeholder="Search articles, authors, topics..."
+                  className="w-full bg-slate-800/50 border border-slate-600 rounded-full py-3 pl-12 pr-4 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all duration-200"
+                />
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <svg className="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
 
-          {/*profile */}
-          <Link className="rounded-[50%] bg-amber-400 px-2 py-2 sm:hidden">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-              />
-            </svg>
-          </Link>
-        </div>
+            {/* Desktop Menu Items */}
+            <div className="hidden md:flex items-center space-x-4">
+              {/* Search button for mobile/tablet */}
+              <button className="md:hidden p-2 rounded-full bg-slate-800 hover:bg-slate-700 transition-colors duration-200">
+                <svg className="h-6 w-6 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </button>
 
-        {/*second div */}
-        <div className="nav-btns w-full hidden absolute bottom-0  p-2 sm:relative sm:flex sm:flex-row sm:justify-end sm:items-center sm:gap-6 sm:w-full sm:max-w-[80%]">
-          {/*Search Link */}
-          <Link className="w-full bg-amber-400 p-2 sm:w-auto sm:rounded-[50%] sm:bg-amber-400 sm:px-2 sm:py-2 md:hidden">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-              />
-            </svg>
-          </Link>
+              {/* Notifications */}
+              <button className="relative p-2 rounded-full bg-slate-800 hover:bg-slate-700 transition-colors duration-200">
+                <svg className="h-6 w-6 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-5-5V9a6 6 0 00-12 0v3l-5 5h5m0 0v1a3 3 0 006 0v-1" />
+                </svg>
+                <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 rounded-full flex items-center justify-center text-xs text-white">
+                  3
+                </span>
+              </button>
 
-          {/*Search bar */}
-          <input
-            type="search"
-            name="search"
-            id="search"
-            placeholder="Search..."
-            className=" hidden md:flex md:flex-1 md:outline-none md:rounded-2xl md:p-2 md:px-4 md:border text-light md:border-dark-light md:focus:ring-2 md:focus:ring-light"
-          />
+              {/* Write button */}
+              <Link
+                to="/write"
+                className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-amber-400 to-orange-500 text-slate-900 font-medium rounded-full hover:from-amber-500 hover:to-orange-600 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+              >
+                <svg className="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18 4a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6a2 2 0 012-2h2z" />
+                </svg>
+                Write
+              </Link>
 
-          {/*notification Link */}
-          <Link className="w-full bg-amber-400 p-2 sm:rounded-[50%] sm:bg-amber-400 sm:px-2 sm:py-2 sm:w-auto">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"
-              />
-            </svg>
-          </Link>
+              {/* Auth buttons */}
+              {loggedIn ? (
+                <div className="flex items-center space-x-3">
+                  <button className="p-2 rounded-full bg-slate-800 hover:bg-slate-700 transition-colors duration-200">
+                    <svg className="h-6 w-6 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={logout}
+                    className="px-4 py-2 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white rounded-full transition-all duration-200"
+                  >
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  to="/signin"
+                  className="px-4 py-2 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white rounded-full transition-all duration-200"
+                >
+                  Sign In
+                </Link>
+              )}
+            </div>
 
-          {/*write Link */}
-          <Link className="w-full  p-2 sm:bg-dark-light sm:text-white sm:px-4 sm:py-2 sm:rounded-xl sm:hover:bg-bright sm:hover:text-dark sm:transition-all sm:w-auto">
-            write
-          </Link>
-
-          {/*login Link and Logout Link */}
-          {loggedIn ? (
+            {/* Mobile menu button */}
             <button
-              onClick={logout}
-              className="w-full p-2  sm:bg-dark-light sm:text-white sm:px-4 sm:py-2 sm:rounded-xl sm:hover:bg-bright sm:hover:text-dark sm:transition-all sm:w-auto"
-            >Log out</button>
-          ) : (
-            <Link
-              to="/signin"
-              className="w-full p-2  sm:bg-dark-light sm:text-white sm:px-4 sm:py-2 sm:rounded-xl sm:hover:bg-bright sm:hover:text-dark sm:transition-all sm:w-auto"
+              onClick={toggleMobileMenu}
+              className="md:hidden p-2 rounded-full bg-slate-800 hover:bg-slate-700 transition-colors duration-200"
             >
-              Sign In
-            </Link>
-          )}
+              <svg
+                className={`h-6 w-6 text-slate-300 transform transition-transform duration-200 ${
+                  isMobileMenuOpen ? 'rotate-180' : ''
+                }`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                {isMobileMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
         </div>
+
+        {/* Mobile Menu */}
+        <div
+          className={`md:hidden transition-all duration-300 ease-in-out ${
+            isMobileMenuOpen 
+              ? 'max-h-96 opacity-100' 
+              : 'max-h-0 opacity-0 overflow-hidden'
+          }`}
+        >
+          <div className="px-4 pt-2 pb-4 space-y-3 bg-slate-800/95 backdrop-blur-lg border-t border-slate-700/50">
+            {/* Mobile Search */}
+            <div className="relative">
+              <input
+                type="search"
+                placeholder="Search..."
+                className="w-full bg-slate-700/50 border border-slate-600 rounded-full py-3 pl-12 pr-4 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent"
+              />
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <svg className="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+            </div>
+
+            {/* Mobile Menu Items */}
+            <div className="space-y-2">
+              <Link
+                to="/notifications"
+                className="flex items-center px-4 py-3 text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-xl transition-all duration-200"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <svg className="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-5-5V9a6 6 0 00-12 0v3l-5 5h5m0 0v1a3 3 0 006 0v-1" />
+                </svg>
+                Notifications
+                <span className="ml-auto bg-red-500 text-white text-xs px-2 py-1 rounded-full">3</span>
+              </Link>
+
+              <Link
+                to="/write"
+                className="flex items-center px-4 py-3 text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-xl transition-all duration-200"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <svg className="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18 4a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6a2 2 0 012-2h2z" />
+                </svg>
+                Write Article
+              </Link>
+
+              {loggedIn ? (
+                <>
+                  <Link
+                    to="/profile"
+                    className="flex items-center px-4 py-3 text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-xl transition-all duration-200"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <svg className="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    Profile
+                  </Link>
+                  <button
+                    onClick={() => {
+                      logout();
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="w-full flex items-center px-4 py-3 text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-xl transition-all duration-200"
+                  >
+                    <svg className="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <Link
+                  to="/signin"
+                  className="flex items-center px-4 py-3 text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-xl transition-all duration-200"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <svg className="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                  </svg>
+                  Sign In
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Main Content with proper spacing */}
+      <div className="pt-16">
+        <Outlet />
       </div>
-      <Outlet />
     </>
   );
 };

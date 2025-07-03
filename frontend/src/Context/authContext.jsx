@@ -4,12 +4,16 @@ import axios from "axios";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  const [loading, setLoading] = useState(true);
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
 
   const checkAuth = async () => {
+    setLoading(true);
     try {
-      const res = await axios.get("http://localhost:3000/users/me", { withCredentials: true });
+      const res = await axios.get("http://localhost:3000/users/me", {
+        withCredentials: true,
+      });
       if (res.data.success) {
         setLoggedIn(true);
         setUser(res.data.user);
@@ -17,6 +21,8 @@ export const AuthProvider = ({ children }) => {
     } catch {
       setLoggedIn(false);
       setUser(null);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -25,16 +31,25 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const logout = async () => {
-    await axios.post("http://localhost:3000/users/logout", {}, { withCredentials: true });
+    await axios.post(
+      "http://localhost:3000/users/logout",
+      {},
+      { withCredentials: true }
+    );
     setLoggedIn(false);
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ loggedIn, user, checkAuth, logout }}>
+    <AuthContext.Provider
+      value={{ loggedIn, user, checkAuth, logout, loading }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+// ✅ Vite-compatible export (named function)
+export function useAuth() {
+  return useContext(AuthContext);
+}
