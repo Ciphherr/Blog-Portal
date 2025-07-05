@@ -62,7 +62,7 @@ const WriteBlog = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-dark via-dark-light to-dark p-4 md:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-dark to-dark-light p-4 md:p-8">
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-64 h-64 bg-bright/5 rounded-full blur-3xl animate-pulse"></div>

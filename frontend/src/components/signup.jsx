@@ -53,7 +53,7 @@ const signup = ({type}) => {
   return (
     <div className="absolute top-0 z-10 w-full h-screen overflow-hidden">
       {/* Animated Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-dark via-dark-light to-dark">
+      <div className="absolute inset-0 bg-gradient-to-br from-dark to-dark-light">
         {/* Floating geometric shapes */}
         <div className="absolute top-1/4 right-20 w-24 h-24 bg-bright/20 rotate-45 animate-bounce" style={{animationDelay: '1s', animationDuration: '3s'}}></div>
         <div className="absolute bottom-20 left-1/4 w-40 h-40 bg-bright/5 rounded-full blur-2xl animate-pulse" style={{animationDelay: '2s'}}></div>

@@ -37,4 +37,30 @@ const createBlog = async (req, res, next) => {
   }
 };
 
-export { createBlog };
+const getAllBlogs = async (req, res)=>{
+   try {
+    const blogs = await Blogs.find()
+      .populate("owner", "username email") // fetch user's name & email
+      .sort({ createdAt: -1 }); // latest first
+
+    res.status(200).json( new ApiResponse (200, blogs));
+  } catch (error) {
+      throw new ApiError(500, "Failed to fetch blogs");
+  }
+}
+
+const readBlog = async (req, res)=>{
+  try {
+    const blog = await Blogs.findById(req.params.id).populate("owner", "username email");
+    if(!blog){
+      throw new ApiError(404, "Blog not found");
+    }
+    res.status(200).json(
+      new ApiResponse(200, blog)
+    );
+  } catch (error) {
+    return res.status(500).json({ success: false, message: "Failed to fetch blog" });
+  }
+}
+
+export { createBlog, getAllBlogs, readBlog };

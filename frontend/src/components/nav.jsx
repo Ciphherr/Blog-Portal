@@ -20,7 +20,7 @@ const Navbar = () => {
             <div className="flex-shrink-0">
               <Link to="/" className="group flex items-center space-x-2">
                 <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center shadow-lg transform group-hover:scale-105 transition-transform duration-200">
-                  <span className="text-slate-900 font-bold text-xl">L</span>
+                  <span className="text-slate-900 font-bold text-xl">B</span>
                 </div>
                 <span className="text-2xl font-bold bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
                   Literarian
@@ -77,11 +77,11 @@ const Navbar = () => {
               {/* Auth buttons */}
               {loggedIn ? (
                 <div className="flex items-center space-x-3">
-                  <button className="p-2 rounded-full bg-slate-800 hover:bg-slate-700 transition-colors duration-200">
+                  <Link to="/profile" className="p-2 rounded-full bg-slate-800 hover:bg-slate-700 transition-colors duration-200">
                     <svg className="h-6 w-6 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
-                  </button>
+                  </Link>
                   <button
                     onClick={logout}
                     className="px-4 py-2 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white rounded-full transition-all duration-200"
