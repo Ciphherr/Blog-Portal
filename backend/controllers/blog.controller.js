@@ -49,6 +49,15 @@ const getAllBlogs = async (req, res)=>{
   }
 }
 
+const getMyBlogs = async (req, res) => {
+  try {
+    const blogs = await Blogs.find({ owner: req.user._id }).sort({ createdAt: -1 });
+    res.status(200).json(new ApiResponse(200, blogs));
+  } catch (error) {
+    throw new ApiError(500, "Unable to fetch your blogs");
+  }
+};
+
 const readBlog = async (req, res)=>{
   try {
     const blog = await Blogs.findById(req.params.id).populate("owner", "username email");
@@ -63,4 +72,4 @@ const readBlog = async (req, res)=>{
   }
 }
 
-export { createBlog, getAllBlogs, readBlog };
+export { createBlog, getAllBlogs, getMyBlogs, readBlog };

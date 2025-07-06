@@ -22,7 +22,7 @@ const BlogDetails = () => {
   if (!blog) return <p className="text-center mt-10">Loading...</p>;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-dark to-dark-light">
+    <div className="min-h-screen bg-transparent">
       <div className="max-w-4xl mx-auto px-6 py-12">
         {/* Header Section */}
         <div className="mb-8">

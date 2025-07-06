@@ -1,6 +1,7 @@
 import {User} from "../models/user.model.js"
 import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 
 const generateAccessTokenandRefreshToken = async (userId)=>{
@@ -102,4 +103,41 @@ const logoutUser = async (req, res)=>{
    );
 }
 
-export {registerUser, loginUser, logoutUser};
+const updateProfileImage = async (req, res) => {
+  if (!req.file) {
+    throw new ApiError(400, "No image uploaded");
+  }
+
+  const user = await User.findById(req.user._id);
+  if (!user) throw new ApiError(404, "User not found");
+
+  if (req.file?.path) {
+        const cloudinaryUrl = await uploadOnCloudinary(req.file.path);
+        if (!cloudinaryUrl) {
+          throw new ApiError(500, "Image upload failed.");
+        }
+        user.profileImage = cloudinaryUrl;
+      }// or cloudinary URL if you're using that
+  await user.save({ validateBeforeSave: false });
+
+  res.status(200).json(new ApiResponse(200, "Profile picture updated successfully"));
+};
+
+const changePassword = async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+
+  const user = await User.findById(req.user._id);
+  if (!user) throw new ApiError(404, "User not found");
+
+  const isMatch = await user.isPasswordCorrect(oldPassword);
+  if (!isMatch) throw new ApiError(401, "Old password incorrect");
+
+  user.password = newPassword;
+  await user.save();
+
+  res.status(200).json(new ApiResponse(200, "Password changed successfully"));
+};
+
+
+
+export {registerUser, loginUser, logoutUser, updateProfileImage, changePassword};

@@ -21,7 +21,7 @@ const Home = () => {
   if (!blogs) return <p className="text-center mt-10">Loading...</p>;
 
   return (
-    <div className="min-h-screen p-6 bg-gradient-to-br from-dark to-dark-light">
+    <div className="min-h-screen p-6 bg-transparent">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold mb-8 text-light text-center">Latest Blogs</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
