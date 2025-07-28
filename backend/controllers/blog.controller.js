@@ -60,7 +60,7 @@ const getMyBlogs = async (req, res) => {
 
 const readBlog = async (req, res)=>{
   try {
-    const blog = await Blogs.findById(req.params.id).populate("owner", "username email");
+    const blog = await Blogs.findById(req.params.id).populate("owner", "username email profileImage");
     if(!blog){
       throw new ApiError(404, "Blog not found");
     }
@@ -72,4 +72,49 @@ const readBlog = async (req, res)=>{
   }
 }
 
-export { createBlog, getAllBlogs, getMyBlogs, readBlog };
+const searchBlogs = async (req, res, next) => {
+  try {
+    const { query } = req.query;
+
+    if (!query || query.trim() === "") {
+      throw new ApiError(400, "Search query is required");
+    }
+
+    const blogs = await Blogs.aggregate([
+      {
+        $lookup: {
+          from: "users", 
+          localField: "owner",
+          foreignField: "_id",
+          as: "ownerDetails",
+        },
+      },
+      { $unwind: "$ownerDetails" },
+      {
+        $match: {
+          $or: [
+            { title: { $regex: query, $options: "i" } },
+            { content: { $regex: query, $options: "i" } },
+            { "ownerDetails.username": { $regex: query, $options: "i" } },
+          ],
+        },
+      },
+      {
+        $project: {
+          title: 1,
+          content: 1,
+          blogImage: 1,
+          createdAt: 1,
+          "ownerDetails.username": 1,
+          "ownerDetails.email": 1,
+        },
+      },
+    ]);
+
+    return res.status(200).json(new ApiResponse(200, blogs));
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { createBlog, getAllBlogs, getMyBlogs, readBlog, searchBlogs };

@@ -6,6 +6,7 @@ import WriteBlog from './pages/writeBlog'
 import Home from './pages/Home'
 import BlogDetails from './pages/BlogDetails'
 import Profile from './pages/Profile';
+import SearchResults from './pages/SearchResults';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
               <Route path='signup' element={<Signup type="sign-up"/>}></Route>
               <Route path="blog/:id" element={<BlogDetails/>}></Route>
               <Route path='profile' element={<Profile/>}></Route>
+              <Route path='search' element={<SearchResults/>}></Route>
             </Route>
         </Routes>
       </div>

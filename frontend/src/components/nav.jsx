@@ -1,13 +1,24 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../Context/authContext";
 import { useState } from "react";
 
 const Navbar = () => {
   const { user, loggedIn, logout } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+      setSearchQuery("");
+      setIsMobileMenuOpen(false); // Close menu on mobile after search
+    }
   };
 
   return (
@@ -30,9 +41,11 @@ const Navbar = () => {
 
             {/* Desktop Navigation */}
             <div className="hidden md:block flex-1 max-w-2xl mx-8">
-              <div className="relative">
+              <form onSubmit={handleSearchSubmit} className="relative">
                 <input
                   type="search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search articles, authors, topics..."
                   className="w-full bg-slate-800/50 border border-slate-600 rounded-full py-3 pl-12 pr-4 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all duration-200"
                 />
@@ -51,7 +64,7 @@ const Navbar = () => {
                     />
                   </svg>
                 </div>
-              </div>
+              </form>
             </div>
 
             {/* Desktop Menu Items */}
@@ -203,9 +216,11 @@ const Navbar = () => {
         >
           <div className="px-4 pt-2 pb-4 space-y-3 bg-slate-800/95 backdrop-blur-lg border-t border-slate-700/50">
             {/* Mobile Search */}
-            <div className="relative">
+            <form onSubmit={handleSearchSubmit} className="relative">
               <input
                 type="search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search..."
                 className="w-full bg-slate-700/50 border border-slate-600 rounded-full py-3 pl-12 pr-4 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent"
               />
@@ -224,7 +239,7 @@ const Navbar = () => {
                   />
                 </svg>
               </div>
-            </div>
+            </form>
 
             {/* Mobile Menu Items */}
             <div className="space-y-2">

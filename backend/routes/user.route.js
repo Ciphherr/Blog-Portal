@@ -12,7 +12,7 @@ router.post("/update-profile-image", verifyJWT, upload.single("profileImage"), u
 router.post("/change-password", verifyJWT, changePassword);
 router.route("/me").get(verifyJWT, (req, res)=>{
     const user = req.user;
-    res.status(200).json({
+    res.status(200).json({  
         success: true,
         user: {
         _id: user._id,

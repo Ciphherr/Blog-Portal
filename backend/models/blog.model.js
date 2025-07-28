@@ -22,6 +22,9 @@ const blogSchema = mongoose.Schema(
     {
         timestamps: true
     }
-)
+);
+
+blogSchema.index({ title: "text", content: "text" });
+blogSchema.index({ owner: 1 });
 
 export const Blogs = mongoose.model("Blogs", blogSchema);

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../Context/authContext";
+import {Link } from "react-router-dom";
 import axios from "axios";
 
 const Profile = () => {
@@ -153,10 +154,7 @@ const Profile = () => {
             ) : (
               <div className="grid md:grid-cols-2 gap-4">
                 {myBlogs.map((blog, index) => (
-                  <div
-                    key={blog._id}
-                    className="group p-5 bg-dark border border-light/10 rounded-xl shadow-md hover:shadow-bright/10 hover:border-bright/30 transition-all duration-300 transform hover:scale-[1.02]"
-                  >
+                  <Link to={`/blog/${blog._id}`}  key={blog._id} className="group p-5 bg-dark border border-light/10 rounded-xl shadow-md hover:shadow-bright/10 hover:border-bright/30 transition-all duration-300 transform hover:scale-[1.02]">
                     <div className="flex items-start justify-between mb-3">
                       <h4 className="font-bold text-lg leading-tight group-hover:text-bright transition-colors">
                         {blog.title}
@@ -182,7 +180,7 @@ const Profile = () => {
                         📊 {blog.content.length} chars
                       </span>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             )}
