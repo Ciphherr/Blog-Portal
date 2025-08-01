@@ -141,6 +141,15 @@ const toggleLike = async(req, res, next)=>{
   }
 }
 
+const getMyLikedBlogs = async (req, res) => {
+  try {
+    const blogs = await Blogs.find({ likes : req.user._id });
+    res.status(200).json(new ApiResponse(200, blogs));
+  } catch (error) {
+    throw new ApiError(500, "Unable to fetch your liked blogs");
+  }
+};
+
 
 const addComment = async (req, res, next)=>{
  try {
@@ -163,4 +172,4 @@ const addComment = async (req, res, next)=>{
  }
 }
 
-export { createBlog, getAllBlogs, getMyBlogs, readBlog, searchBlogs, toggleLike, addComment };
+export { createBlog, getAllBlogs, getMyBlogs, readBlog, searchBlogs, toggleLike, getMyLikedBlogs, addComment };

@@ -6,14 +6,22 @@ import axios from "axios";
 const Profile = () => {
   const { user, loading, checkAuth } = useAuth();
   const [myBlogs, setMyBlogs] = useState([]);
+  const [likedBlogs, setLikedBlogs] = useState([]);
   const [passwords, setPasswords] = useState({ oldPassword: "", newPassword: "" });
 
   useEffect(() => {
     const fetchBlogs = async () => {
-      const res = await axios.get("http://localhost:3000/blogs/my/blogs", {
-        withCredentials: true,
-      });
-      if (res.data.success) setMyBlogs(res.data.data);
+      try {
+        const [myRes, likedRes] = await Promise.all([
+          axios.get("http://localhost:3000/blogs/my/blogs", { withCredentials: true }),
+          axios.get("http://localhost:3000/blogs/my/liked-blogs", { withCredentials: true })
+        ]);
+
+        if (myRes.data.success) setMyBlogs(myRes.data.data);
+        if (likedRes.data.success) setLikedBlogs(likedRes.data.data);
+      } catch (err) {
+        console.error("Error fetching blogs:", err);
+      }
     };
 
     fetchBlogs();
@@ -154,6 +162,57 @@ const Profile = () => {
             ) : (
               <div className="grid md:grid-cols-2 gap-4">
                 {myBlogs.map((blog, index) => (
+                  <Link to={`/blog/${blog._id}`}  key={blog._id} className="group p-5 bg-dark border border-light/10 rounded-xl shadow-md hover:shadow-bright/10 hover:border-bright/30 transition-all duration-300 transform hover:scale-[1.02]">
+                    <div className="flex items-start justify-between mb-3">
+                      <h4 className="font-bold text-lg leading-tight group-hover:text-bright transition-colors">
+                        {blog.title}
+                      </h4>
+                      <span className="text-xs text-light/50 bg-light/10 px-2 py-1 rounded-full">
+                        #{index + 1}
+                      </span>
+                    </div>
+                    
+                    <p className="text-sm text-light/80 leading-relaxed mb-4 line-clamp-3">
+                      {blog.content.slice(0, 120)}...
+                    </p>
+                    
+                    <div className="flex items-center justify-between text-xs text-light/50">
+                      <span className="flex items-center gap-1">
+                        📅 {new Date(blog.createdAt).toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric'
+                        })}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        📊 {blog.content.length} chars
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+          {/* Liked Blogs Section */}
+          <div className="bg-dark-light border border-light/20 rounded-xl p-6 shadow-lg mt-6">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-bold flex items-center gap-2">
+                 Your Liked Blogs
+              </h3>
+              <div className="text-sm text-light/70">
+                {likedBlogs.length} {likedBlogs.length === 1 ? 'blog' : 'blogs'}
+              </div>
+            </div>
+
+            {likedBlogs.length === 0 ? (
+              <div className="text-center py-12">
+                <div className="text-6xl mb-4">📝</div>
+                <h4 className="text-xl font-medium text-light/80 mb-2">No blogs liked yet</h4>
+                <p className="text-light/60">Like your first blog to see it here</p>
+              </div>
+            ) : (
+              <div className="grid md:grid-cols-2 gap-4">
+                {likedBlogs.map((blog, index) => (
                   <Link to={`/blog/${blog._id}`}  key={blog._id} className="group p-5 bg-dark border border-light/10 rounded-xl shadow-md hover:shadow-bright/10 hover:border-bright/30 transition-all duration-300 transform hover:scale-[1.02]">
                     <div className="flex items-start justify-between mb-3">
                       <h4 className="font-bold text-lg leading-tight group-hover:text-bright transition-colors">
