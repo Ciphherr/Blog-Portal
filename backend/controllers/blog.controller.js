@@ -117,4 +117,50 @@ const searchBlogs = async (req, res, next) => {
   }
 };
 
-export { createBlog, getAllBlogs, getMyBlogs, readBlog, searchBlogs };
+const toggleLike = async(req, res, next)=>{
+  try {
+    const {id} = req.params;
+    const userId = req.user._id;
+
+    const blog = await Blogs.findById(id);
+    if(!blog) return res.status(404).json({ message: "Blog not found" });
+
+    const index = blog.likes.indexOf(userId);
+    if(index == -1){
+      blog.likes.push(userId);
+    }
+    else{
+      blog.likes.splice(index, 1);
+    }
+
+    await blog.save();
+    res.status(200).json({ success: true, likesCount: blog.likes.length });
+
+  } catch (error) {
+     next(error);
+  }
+}
+
+
+const addComment = async (req, res, next)=>{
+ try {
+   const {id} = req.params;
+   const userId = req.user._id;
+   const username = req.user.username;
+   const {text} = req.body;
+ 
+   if(!text) return res.status(400).json({ message: "Comment cannot be empty" });
+ 
+   const blog = await Blogs.findById(id);
+   if(!blog) return res.status(404).json({ message: "Blog not found" });
+ 
+   blog.comments.push({ user: userId, username, text });
+   await blog.save();
+ 
+   res.status(201).json({ success: true, comments: blog.comments });
+ } catch (error) {
+    next(error);
+ }
+}
+
+export { createBlog, getAllBlogs, getMyBlogs, readBlog, searchBlogs, toggleLike, addComment };
