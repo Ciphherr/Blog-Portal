@@ -1,5 +1,5 @@
 import express from "express";
-import { createBlog, getAllBlogs, getMyBlogs, readBlog, searchBlogs, toggleLike, getMyLikedBlogs, addComment } from "../controllers/blog.controller.js";
+import { createBlog, getAllBlogs, getMyBlogs, readBlog, searchBlogs, toggleLike, getMyLikedBlogs, addComment, updateBlog, deleteBlog } from "../controllers/blog.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { upload } from "../middlewares/upload.middleware.js";
 
@@ -12,6 +12,8 @@ blogRouter.get("/search", verifyJWT, searchBlogs);
 blogRouter.put("/:id/like", verifyJWT, toggleLike);
 blogRouter.post("/:id/comment", verifyJWT, addComment);
 blogRouter.get("/:id", verifyJWT, readBlog);
+blogRouter.put("/:id", verifyJWT, upload.single("blogImage"), updateBlog);
+blogRouter.delete("/:id", verifyJWT, deleteBlog);
 
 
 

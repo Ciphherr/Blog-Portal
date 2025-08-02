@@ -7,6 +7,7 @@ import Home from './pages/Home'
 import BlogDetails from './pages/BlogDetails'
 import Profile from './pages/Profile';
 import SearchResults from './pages/SearchResults';
+import EditBlog from './pages/EditBlog';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
               <Route path="blog/:id" element={<BlogDetails/>}></Route>
               <Route path='profile' element={<Profile/>}></Route>
               <Route path='search' element={<SearchResults/>}></Route>
+              <Route path="/edit-blog/:id" element={<EditBlog />}></Route>
             </Route>
         </Routes>
       </div>

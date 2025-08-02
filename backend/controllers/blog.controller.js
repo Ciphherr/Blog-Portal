@@ -172,4 +172,55 @@ const addComment = async (req, res, next)=>{
  }
 }
 
-export { createBlog, getAllBlogs, getMyBlogs, readBlog, searchBlogs, toggleLike, getMyLikedBlogs, addComment };
+const updateBlog = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { title, content } = req.body;
+
+    const blog = await Blogs.findById(id);
+    if (!blog) return res.status(404).json({ message: "Blog not found" });
+
+    // Check ownership
+    if (blog.owner.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: "Unauthorized to edit this blog" });
+    }
+
+    // Update fields
+    if (title) blog.title = title;
+    if (content) blog.content = content;
+
+    // Update image if provided
+    if (req.file?.path) {
+      const cloudinaryUrl = await uploadOnCloudinary(req.file.path);
+      if (cloudinaryUrl) blog.blogImage = cloudinaryUrl;
+    }
+
+    await blog.save();
+    res.status(200).json({ success: true, message: "Blog updated successfully", blog });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteBlog = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const blog = await Blogs.findById(id);
+    if (!blog) return res.status(404).json({ message: "Blog not found" });
+
+    // Check ownership
+    if (blog.owner.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: "Unauthorized to delete this blog" });
+    }
+
+    await blog.deleteOne();
+    res.status(200).json({ success: true, message: "Blog deleted successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+
+export { createBlog, getAllBlogs, getMyBlogs, readBlog, searchBlogs, toggleLike, getMyLikedBlogs, addComment, updateBlog, deleteBlog };
